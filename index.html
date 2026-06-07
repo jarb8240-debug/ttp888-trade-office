@@ -756,11 +756,11 @@ const DESKS=[
  {k:'gm',x:490,y:250,label:'หัวหน้าทีม'},
  {k:'chart',x:690,y:250,label:'กราฟเจาะลึก'},
  {k:'strat',x:890,y:250,label:'กลยุทธ์/กองทุน'},
- {k:'news',x:250,y:420,label:'ข่าว มองบวก'},
- {k:'news2',x:250,y:620,label:'ข่าว มองระวัง'},
+ {k:'news',x:250,y:480,label:'ข่าว มองบวก'},
+ {k:'news2',x:250,y:720,label:'ข่าว มองระวัง'},
  {k:'tech',x:1130,y:480,label:'เทคนิค'},
- {k:'risk',x:250,y:820,label:'ความเสี่ยง'},
- {k:'port',x:1130,y:780,label:'พอร์ต'},
+ {k:'port',x:1130,y:720,label:'พอร์ต'},
+ {k:'risk',x:690,y:840,label:'ความเสี่ยง'},
 ];
 /* ห้องสี่เหลี่ยมของแผนก (ผนังจริงจากชุด wall ที่โหลดมา + ประตูฝั่งใน) */
 const ROOMS=[
@@ -804,11 +804,11 @@ function wbox(d){return {bx0:d.x-92,bx1:d.x+92,by0:d.y+62,by1:d.y+145};} // เ�
 const chars=DESKS.map(d=>({k:d.k,m:MEMBERS[d.k],x:d.x,y:d.y+74,tx:d.x,ty:d.y+74,hx:d.x,hy:d.y+74,...wbox(d),wait:Math.random()*2,d8:'south',d4:'south',trav:0,sp:38+Math.random()*14,cur:0,path:[]})); // เดินวนเฉพาะกล่องของตัวเอง
 /* 🐶 น้องหมา 5 ตัวประจำออฟฟิศ — วิ่งเล่นได้ทั้งห้อง (แต่ละตัวสไปรท์ต่างกัน) */
 const DOGZONES=[
- {h:[695,820],zx0:600,zx1:790,zy0:760,zy1:898},   // กลาง-ล่าง
- {h:[450,770],zx0:340,zx1:580,zy0:610,zy1:898},   // ซ้าย-ล่าง
- {h:[950,770],zx0:820,zx1:1080,zy0:610,zy1:898},  // ขวา-ล่าง
- {h:[515,510],zx0:440,zx1:600,zy0:440,zy1:593},   // กลาง-ซ้าย (ข้างโต๊ะประชุม)
- {h:[860,510],zx0:780,zx1:940,zy0:440,zy1:593},   // กลาง-ขวา (ข้างโต๊ะประชุม)
+ {h:[695,420],zx0:600,zx1:790,zy0:345,zy1:485},   // กลาง-บน (โถงผู้บริหาร)
+ {h:[460,770],zx0:350,zx1:580,zy0:610,zy1:898},   // ซ้าย-ล่าง
+ {h:[920,770],zx0:800,zx1:1030,zy0:610,zy1:898},  // ขวา-ล่าง
+ {h:[455,490],zx0:350,zx1:560,zy0:400,zy1:580},   // กลาง-ซ้าย
+ {h:[905,490],zx0:800,zx1:1010,zy0:400,zy1:580},  // กลาง-ขวา
 ];
 const dogs=DOGZONES.map((z,i)=>({sp:i+1,x:z.h[0],y:z.h[1],tx:z.h[0],ty:z.h[1],home:z.h,zx0:z.zx0,zx1:z.zx1,zy0:z.zy0,zy1:z.zy1,wait:Math.random()*2.5,d8:'south',d4:'south',trav:0,cur:0,spd:46+Math.random()*18,path:[]}));
 // ขอบเขตน้องหมา: แคบกว่าคน อยู่กลางออฟฟิศเสมอ ไม่มีทางวิ่งหลุดขอบจอ
@@ -908,9 +908,10 @@ function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const t=ts/1
  cx.fillStyle='rgba(14,143,138,.07)';cx.beginPath();cx.roundRect(135,350,320,640,22);cx.fill();   // ฝั่งข่าว 2 คน+ความเสี่ยง
  cx.fillStyle='rgba(124,58,237,.06)';cx.beginPath();cx.roundRect(925,350,320,640,22);cx.fill();   // ฝั่งเทคนิค+พอร์ต
  cx.fillStyle='rgba(21,69,214,.07)';cx.beginPath();cx.roundRect(385,205,610,140,18);cx.fill();    // โซนหัวหน้าทีม+กราฟ+กลยุทธ์
+ cx.fillStyle='rgba(214,40,40,.06)';cx.beginPath();cx.roundRect(555,768,270,208,22);cx.fill();    // มุมผู้จัดการความเสี่ยง (ล่างกลาง)
  // ป้ายชื่อห้อง
  cx.font='600 12px Kanit,system-ui';cx.textAlign='center';
- for(const[tx,ty,lb]of[[280,365,'🗞️ ห้องข่าว & ความเสี่ยง'],[690,228,'🏛️ โถงผู้บริหาร'],[1110,365,'📈 ห้องเทคนิค & พอร์ต']]){
+ for(const[tx,ty,lb]of[[280,365,'🗞️ ห้องข่าว · บวก/ระวัง'],[690,228,'🏛️ โถงผู้บริหาร'],[1110,365,'📈 ห้องเทคนิค & พอร์ต']]){
   cx.strokeStyle='rgba(255,255,255,.92)';cx.lineWidth=3;cx.strokeText(lb,tx,ty);
   cx.fillStyle='rgba(54,65,92,.75)';cx.fillText(lb,tx,ty);}
  // ผนังบนสไตล์โมเดิร์น + หน้าต่างกระจก
