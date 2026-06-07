@@ -767,7 +767,12 @@ function findPath(x0,y0,x1,y1){
  path.reverse();path[path.length-1]=[x1,y1];
  if(path.length>1)path.shift(); // จุดแรกคือช่องที่ยืนอยู่
  return path;}
-const chars=DESKS.map(d=>({k:d.k,m:MEMBERS[d.k],x:d.x,y:d.y+74,tx:d.x,ty:d.y+74,hx:d.x,hy:d.y+74,wait:Math.random()*2,d8:'south',d4:'south',trav:0,sp:38+Math.random()*14,cur:0,path:[]})); // เกิดที่หน้าโต๊ะตัวเองพอดี
+function wbox(d){const bx0=d.x-90,bx1=d.x+90;let by0,by1;
+ if(d.y<=300){by0=d.y+60;by1=d.y+155;}        // แถวบน: เดินหน้าโต๊ะตัวเอง
+ else if(d.y<520){by0=d.y+10;by1=d.y+140;}     // ฝั่งกลาง (ข่าว/เทคนิค): อยู่ครึ่งบนของฝั่ง ไม่ลงไปโต๊ะล่าง
+ else {by0=d.y-30;by1=d.y+110;}                // ฝั่งล่าง (เสี่ยง/พอร์ต): อยู่ครึ่งล่าง ไม่ขึ้นไปโต๊ะบน
+ return {bx0,bx1,by0,by1};}
+const chars=DESKS.map(d=>({k:d.k,m:MEMBERS[d.k],x:d.x,y:d.y+74,tx:d.x,ty:d.y+74,hx:d.x,hy:d.y+74,...wbox(d),wait:Math.random()*2,d8:'south',d4:'south',trav:0,sp:38+Math.random()*14,cur:0,path:[]})); // เดินวนเฉพาะกล่องของตัวเอง
 /* 🐶 น้องหมาประจำออฟฟิศ — วิ่งเล่นได้ทั้งห้อง */
 const dog={x:620,y:700,tx:620,ty:700,wait:1,d8:'south',d4:'south',trav:0,cur:0,sp:62,path:[]};
 // ขอบเขตน้องหมา: แคบกว่าคน อยู่กลางออฟฟิศเสมอ ไม่มีทางวิ่งหลุดขอบจอ
@@ -802,8 +807,8 @@ function newTarget(c){
  // เดินวนรอบโต๊ะตัวเองในกล่องเฉพาะตัว (ไม่ทับโซนคนอื่น = แทบไม่มีทางเดินชนกัน)
  let found=false;
  for(let i=0;i<24;i++){
-  const tx=c.hx+(Math.random()*180-90);   // ±90px รอบโต๊ะตัวเอง
-  const ty=c.hy+(Math.random()*150-35);   // ตั้งแต่ข้างโต๊ะถึงด้านหน้า
+  const tx=c.bx0+Math.random()*(c.bx1-c.bx0);   // เดินเฉพาะกล่องของตัวเอง (x)
+  const ty=c.by0+Math.random()*(c.by1-c.by0);   // เดินเฉพาะกล่องของตัวเอง (y) — ไม่ก้าวไปโซนโต๊ะคนอื่น
   if(!blocked(tx,ty)&&Math.hypot(tx-c.x,ty-c.y)>38
    &&chars.every(o=>o===c||Math.hypot(o.tx-tx,o.ty-ty)>62)){ // จุดหมายไม่ทับของคนอื่น
    const p=findPath(c.x,c.y,tx,ty);
