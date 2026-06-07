@@ -800,11 +800,7 @@ function findPath(x0,y0,x1,y1){
  path.reverse();path[path.length-1]=[x1,y1];
  if(path.length>1)path.shift(); // จุดแรกคือช่องที่ยืนอยู่
  return path;}
-function wbox(d){const bx0=d.x-90,bx1=d.x+90;let by0,by1;
- if(d.y<=300){by0=d.y+60;by1=d.y+155;}        // แถวบน: เดินหน้าโต๊ะตัวเอง
- else if(d.y<520){by0=d.y+10;by1=d.y+140;}     // ฝั่งกลาง (ข่าว/เทคนิค): อยู่ครึ่งบนของฝั่ง ไม่ลงไปโต๊ะล่าง
- else {by0=d.y-30;by1=d.y+110;}                // ฝั่งล่าง (เสี่ยง/พอร์ต): อยู่ครึ่งล่าง ไม่ขึ้นไปโต๊ะบน
- return {bx0,bx1,by0,by1};}
+function wbox(d){return {bx0:d.x-92,bx1:d.x+92,by0:d.y+62,by1:d.y+145};} // เดินวนเฉพาะแถบหน้าโต๊ะตัวเอง (สูง ~83px) — โต๊ะที่ซ้อนกันมีช่องว่างคั่น >110px ไม่มีทางชนกัน
 const chars=DESKS.map(d=>({k:d.k,m:MEMBERS[d.k],x:d.x,y:d.y+74,tx:d.x,ty:d.y+74,hx:d.x,hy:d.y+74,...wbox(d),wait:Math.random()*2,d8:'south',d4:'south',trav:0,sp:38+Math.random()*14,cur:0,path:[]})); // เดินวนเฉพาะกล่องของตัวเอง
 /* 🐶 น้องหมา 5 ตัวประจำออฟฟิศ — วิ่งเล่นได้ทั้งห้อง (แต่ละตัวสไปรท์ต่างกัน) */
 const DOGZONES=[
