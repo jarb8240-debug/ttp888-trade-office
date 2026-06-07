@@ -708,8 +708,9 @@ function ld(n){const im=new Image();im.onload=()=>{im.ok=true;};im.onerror=()=>{
 for(const r of ['gm','news','tech','risk','port','strat','chart']){
  for(const d of ['east','north-east','north','north-west','south-east','south-west','south','west'])ld(`char_${r}_${d}`);
  for(const d of ['east','north','south','west'])for(let f=0;f<6;f++)ld(`walk_${r}_${d}_${f}`);}
-for(const d of ['east','north-east','north','north-west','south-east','south-west','south','west'])ld(`dog_${d}`);
-for(const d of ['east','north','south','west'])for(let f=0;f<6;f++)ld(`dogwalk_${d}_${f}`);
+for(let n=1;n<=5;n++){
+ for(const d of ['east','north-east','north','north-west','south-east','south-west','south','west'])ld(`dog${n}_${d}`);
+ for(const d of ['east','north','south','west'])for(let f=0;f<6;f++)ld(`dogwalk${n}_${d}_${f}`);}
 for(const o of ['obj_desk','obj_ticker','obj_table','obj_plant','obj_rug','obj_siren','obj_coffee','obj_safe',
  'obj_desk2','obj_ticker2','obj_table2','obj_safe2','obj_coffee2','logo','wall_glass','wall_v','wall_h','wall_door','wall_corner'])ld(o);
 function img(n){const i=IMGS[n];return(i&&i.ok)?i:null;}
@@ -773,36 +774,41 @@ function wbox(d){const bx0=d.x-90,bx1=d.x+90;let by0,by1;
  else {by0=d.y-30;by1=d.y+110;}                // ฝั่งล่าง (เสี่ยง/พอร์ต): อยู่ครึ่งล่าง ไม่ขึ้นไปโต๊ะบน
  return {bx0,bx1,by0,by1};}
 const chars=DESKS.map(d=>({k:d.k,m:MEMBERS[d.k],x:d.x,y:d.y+74,tx:d.x,ty:d.y+74,hx:d.x,hy:d.y+74,...wbox(d),wait:Math.random()*2,d8:'south',d4:'south',trav:0,sp:38+Math.random()*14,cur:0,path:[]})); // เดินวนเฉพาะกล่องของตัวเอง
-/* 🐶 น้องหมาประจำออฟฟิศ — วิ่งเล่นได้ทั้งห้อง */
-const dog={x:620,y:700,tx:620,ty:700,wait:1,d8:'south',d4:'south',trav:0,cur:0,sp:62,path:[]};
+/* 🐶 น้องหมา 5 ตัวประจำออฟฟิศ — วิ่งเล่นได้ทั้งห้อง (แต่ละตัวสไปรท์ต่างกัน) */
+const DOGHOMES=[[620,730],[430,710],[810,710],[520,500],[720,500]];
+const dogs=DOGHOMES.map((h,i)=>({sp:i+1,x:h[0],y:h[1],tx:h[0],ty:h[1],home:h,wait:Math.random()*2.5,d8:'south',d4:'south',trav:0,cur:0,spd:50+Math.random()*20,path:[]}));
 // ขอบเขตน้องหมา: แคบกว่าคน อยู่กลางออฟฟิศเสมอ ไม่มีทางวิ่งหลุดขอบจอ
 function dogBlocked(x,y){return x<230||x>1050||y<340||y>765||blocked(x,y);}
-function dogTarget(){for(let i=0;i<24;i++){
+function dogTarget(g){for(let i=0;i<24;i++){
   const tx=240+Math.random()*800,ty=350+Math.random()*405;
-  if(!dogBlocked(tx,ty)&&Math.hypot(tx-dog.x,ty-dog.y)>70){
-   const p=findPath(dog.x,dog.y,tx,ty);
-   if(p){dog.tx=tx;dog.ty=ty;dog.path=p;return;}}}
- dog.tx=620;dog.ty=700;dog.path=[[620,700]];}
-function drawDog(t){const moving=Math.hypot(dog.tx-dog.x,dog.ty-dog.y)>2&&dog.wait<=0;
- cx.save();cx.translate(dog.x,dog.y);
+  if(!dogBlocked(tx,ty)&&Math.hypot(tx-g.x,ty-g.y)>70
+     &&dogs.every(o=>o===g||Math.hypot(o.tx-tx,o.ty-ty)>58)){ // ไม่ไปออที่เดียวกับหมาตัวอื่น
+   const p=findPath(g.x,g.y,tx,ty);
+   if(p){g.tx=tx;g.ty=ty;g.path=p;return;}}}
+ g.tx=g.home[0];g.ty=g.home[1];g.path=[[g.home[0],g.home[1]]];}
+function drawDog(g,t){const moving=Math.hypot(g.tx-g.x,g.ty-g.y)>2&&g.wait<=0;
+ cx.save();cx.translate(g.x,g.y);
  cx.fillStyle='rgba(0,0,0,.13)';cx.beginPath();cx.ellipse(0,2,17,6,0,0,7);cx.fill();
- const sp=moving?img(`dogwalk_${dog.d4}_${Math.floor(dog.trav/5.5)%6}`):img(`dog_${dog.d8}`);
+ const sp=moving?img(`dogwalk${g.sp}_${g.d4}_${Math.floor(g.trav/5.5)%6}`):img(`dog${g.sp}_${g.d8}`);
  if(sp){const S=76;cx.imageSmoothingEnabled=false;cx.drawImage(sp,-S/2,-S+10,S,S);}
  else{cx.font='34px serif';cx.textAlign='center';cx.fillText('🐶',0,-2);}
  cx.restore();}
-function updateDog(dt){
- dog.x=Math.min(1050,Math.max(230,dog.x));dog.y=Math.min(765,Math.max(340,dog.y)); // ตาข่ายนิรภัย
- if(blocked(dog.x,dog.y)){dog.x=620;dog.y=700;dogTarget();}
- if(dog.wait>0){dog.wait-=dt;return;}
- if(!dog.path.length){dogTarget();dog.wait=Math.random()<0.4?0.2:0.8+Math.random()*2.5;dog.cur=0;return;}
- const [wx,wy]=dog.path[0];
- const dx=wx-dog.x,dy=wy-dog.y,d=Math.hypot(dx,dy);
- if(d<6){dog.path.shift();return;}
- const dT=Math.hypot(dog.tx-dog.x,dog.ty-dog.y);
- const want=Math.min(dog.sp,10+dT*1.3);dog.cur+=(want-dog.cur)*Math.min(1,dt*4.5);
- const step=Math.min(dog.cur*dt,d);
- dog.x+=dx/d*step;dog.y+=dy/d*step;dog.trav+=step; // เดินตามเส้นทางที่คำนวณแล้ว ไม่มีทางติด
- dog.d8=dir8(dx/d,dy/d);dog.d4=dir4(dx/d,dy/d);}
+function updateDog(g,dt){
+ g.x=Math.min(1050,Math.max(230,g.x));g.y=Math.min(765,Math.max(340,g.y)); // ตาข่ายนิรภัย
+ if(blocked(g.x,g.y)){g.x=g.home[0];g.y=g.home[1];dogTarget(g);}
+ // กันชนระหว่างหมา — ดันแยกเบาๆ
+ for(const o of dogs){if(o===g)continue;const sx=g.x-o.x,sy=g.y-o.y,sd=Math.hypot(sx,sy);
+  if(sd<42&&sd>0.1){const k=(42-sd)/sd*0.5;const nx=g.x+sx*k,ny=g.y+sy*k;if(!dogBlocked(nx,ny)){g.x=nx;g.y=ny;}}}
+ if(g.wait>0){g.wait-=dt;return;}
+ if(!g.path.length){dogTarget(g);g.wait=Math.random()<0.4?0.2:0.8+Math.random()*2.5;g.cur=0;return;}
+ const [wx,wy]=g.path[0];
+ const dx=wx-g.x,dy=wy-g.y,d=Math.hypot(dx,dy);
+ if(d<6){g.path.shift();return;}
+ const dT=Math.hypot(g.tx-g.x,g.ty-g.y);
+ const want=Math.min(g.spd,10+dT*1.3);g.cur+=(want-g.cur)*Math.min(1,dt*4.5);
+ const step=Math.min(g.cur*dt,d);
+ g.x+=dx/d*step;g.y+=dy/d*step;g.trav+=step; // เดินตามเส้นทางที่คำนวณแล้ว ไม่มีทางติด
+ g.d8=dir8(dx/d,dy/d);g.d4=dir4(dx/d,dy/d);}
 function newTarget(c){
  // เดินวนรอบโต๊ะตัวเองในกล่องเฉพาะตัว (ไม่ทับโซนคนอื่น = แทบไม่มีทางเดินชนกัน)
  let found=false;
@@ -947,8 +953,8 @@ function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const t=ts/1
   ...chars.map(c=>({z:c.y,f:()=>drawPixelChar(c,t)})),
   {z:600,f:()=>{drawObj(pickN('obj_table2','obj_table'),620,600,150,150);}}, // โต๊ะประชุมกลางห้องใหญ่
   ...DESKS.map(d=>({z:d.y+34,f:()=>drawDesk(d)})),
-  {z:0,f:()=>updateDog(dt)},          // อัปเดตน้องหมาก่อนวาด
-  {z:dog.y,f:()=>drawDog(t)},         // 🐶 น้องหมา (เอากำแพงห้องออกแล้ว)
+  {z:-1,f:()=>{for(const g of dogs)updateDog(g,dt);}},   // อัปเดตน้องหมาทั้ง 5 ตัวก่อนวาด
+  ...dogs.map(g=>({z:g.y,f:()=>drawDog(g,t)})),          // 🐶 น้องหมา 5 ตัว (เรียงความลึกตามตัว)
  ];
  ENTS.sort((a,b)=>a.z-b.z).forEach(e=>e.f());
  cx.restore();
