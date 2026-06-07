@@ -712,7 +712,7 @@ for(let n=1;n<=5;n++){
  for(const d of ['east','north-east','north','north-west','south-east','south-west','south','west'])ld(`dog${n}_${d}`);
  for(const d of ['east','north','south','west'])for(let f=0;f<6;f++)ld(`dogwalk${n}_${d}_${f}`);}
 for(const o of ['obj_desk','obj_ticker','obj_table','obj_plant','obj_rug','obj_siren','obj_coffee','obj_safe',
- 'obj_desk2','obj_ticker2','obj_table2','obj_safe2','obj_coffee2','logo','wall_glass','wall_v','wall_h','wall_door','wall_corner'])ld(o);
+ 'obj_desk2','obj_ticker2','obj_table2','obj_safe2','obj_coffee2','obj_display','obj_window','logo','wall_glass','wall_v','wall_h','wall_door','wall_corner'])ld(o);
 function img(n){const i=IMGS[n];return(i&&i.ok)?i:null;}
 function pickN(a,b){return img(a)?a:b;} // ใช้เวอร์ชันคมชัด (Object-2) ก่อน ถ้าไม่มีถอยไปตัวเดิม
 function dir8(vx,vy){const a=Math.atan2(-vy,vx)*180/Math.PI;
@@ -883,13 +883,14 @@ function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const t=ts/1
  // ผนังบนสไตล์โมเดิร์น + หน้าต่างกระจก
  cx.fillStyle='#f9fafc';cx.fillRect(vx0,vy0,vx1-vx0,Math.max(0,200-vy0));
  for(const wx of [150,320,930,1090]){
+  if(drawObj('obj_window',wx+55,172,130,132))continue;   // 🪟 หน้าต่างกระจกฝ้าใหม่
   const g=cx.createLinearGradient(0,46,0,160);g.addColorStop(0,'#bfe0ff');g.addColorStop(1,'#e9f4ff');
   cx.fillStyle=g;cx.beginPath();cx.roundRect(wx,46,110,118,10);cx.fill();
   cx.strokeStyle='#c4cfe2';cx.lineWidth=4;cx.stroke();
   cx.beginPath();cx.moveTo(wx+55,46);cx.lineTo(wx+55,164);cx.lineWidth=2;cx.stroke();
   cx.fillStyle='#e2e7f1';cx.fillRect(wx-6,162,122,8);}
  // โลโก้ทีมติดผนัง (ขนาบกระดานราคา ซ้าย-ขวา สมมาตร)
- drawObj('logo',570,166,64,64); drawObj('logo',810,166,64,64);
+ drawObj('logo',540,166,64,64); drawObj('logo',840,166,64,64);
  cx.fillStyle='#d6dbe8';cx.fillRect(vx0,200,vx1-vx0,5);                                            // ขอบบัวผนัง
  cx.fillStyle='rgba(28,35,48,.05)';cx.fillRect(vx0,205,vx1-vx0,10);                                // เงาใต้ผนัง
  // โซนประชุมกลางห้อง (เอาพรมวงกลมน้ำเงินออกแล้ว — เหลือป้ายชื่อโซน)
@@ -897,7 +898,8 @@ function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const t=ts/1
  cx.strokeStyle='rgba(255,255,255,.9)';cx.lineWidth=3;cx.strokeText('โซนประชุมทีม · คลิกโต๊ะดูรายงาน 📋',690,686);
  cx.fillStyle='#36415c';cx.fillText('โซนประชุมทีม · คลิกโต๊ะดูรายงาน 📋',690,686);
  // กระดานราคาติดผนังบน (เวอร์ชันคมชัด 128px วาดเท่า native)
- if(drawObj(pickN('obj_ticker2','obj_ticker'),690,196,148,148)){cx.fillStyle='#36415c';cx.font="bold 11px Kanit,system-ui";cx.textAlign='center';cx.fillText('TRADE TEAM AI',690,60);}
+ if(drawObj('obj_display',690,194,214,140)){}  // 📺 หน้าจอเทรดติดผนัง (กระดานราคาใหม่)
+ else if(drawObj(pickN('obj_ticker2','obj_ticker'),690,196,148,148)){cx.fillStyle='#36415c';cx.font="bold 11px Kanit,system-ui";cx.textAlign='center';cx.fillText('TRADE TEAM AI',690,60);}
  else{cx.fillStyle='#1545d6';cx.beginPath();cx.roundRect(580,98,220,34,8);cx.fill();
   cx.fillStyle='#fff';cx.font="bold 13px Kanit,system-ui";cx.textAlign='center';cx.fillText('TRADE TEAM AI',690,120);}
  // ต้นไม้ 6 จุด จัดเรียงสมมาตร
