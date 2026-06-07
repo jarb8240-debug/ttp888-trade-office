@@ -775,14 +775,19 @@ function wbox(d){const bx0=d.x-90,bx1=d.x+90;let by0,by1;
  return {bx0,bx1,by0,by1};}
 const chars=DESKS.map(d=>({k:d.k,m:MEMBERS[d.k],x:d.x,y:d.y+74,tx:d.x,ty:d.y+74,hx:d.x,hy:d.y+74,...wbox(d),wait:Math.random()*2,d8:'south',d4:'south',trav:0,sp:38+Math.random()*14,cur:0,path:[]})); // เดินวนเฉพาะกล่องของตัวเอง
 /* 🐶 น้องหมา 5 ตัวประจำออฟฟิศ — วิ่งเล่นได้ทั้งห้อง (แต่ละตัวสไปรท์ต่างกัน) */
-const DOGHOMES=[[690,800],[455,765],[925,765],[565,560],[815,560]];
-const dogs=DOGHOMES.map((h,i)=>({sp:i+1,x:h[0],y:h[1],tx:h[0],ty:h[1],home:h,wait:Math.random()*2.5,d8:'south',d4:'south',trav:0,cur:0,spd:50+Math.random()*20,path:[]}));
+const DOGZONES=[
+ {h:[695,775],zx0:600,zx1:790,zy0:720,zy1:822},   // กลาง-ล่าง
+ {h:[430,700],zx0:330,zx1:560,zy0:565,zy1:818},   // ซ้าย-ล่าง
+ {h:[960,700],zx0:830,zx1:1088,zy0:565,zy1:818},  // ขวา-ล่าง
+ {h:[515,495],zx0:440,zx1:590,zy0:430,zy1:553},   // กลาง-ซ้าย (ข้างโต๊ะประชุม)
+ {h:[860,495],zx0:780,zx1:940,zy0:430,zy1:553},   // กลาง-ขวา (ข้างโต๊ะประชุม)
+];
+const dogs=DOGZONES.map((z,i)=>({sp:i+1,x:z.h[0],y:z.h[1],tx:z.h[0],ty:z.h[1],home:z.h,zx0:z.zx0,zx1:z.zx1,zy0:z.zy0,zy1:z.zy1,wait:Math.random()*2.5,d8:'south',d4:'south',trav:0,cur:0,spd:46+Math.random()*18,path:[]}));
 // ขอบเขตน้องหมา: แคบกว่าคน อยู่กลางออฟฟิศเสมอ ไม่มีทางวิ่งหลุดขอบจอ
 function dogBlocked(x,y){return x<245||x>1135||y<360||y>830||blocked(x,y);}
 function dogTarget(g){for(let i=0;i<24;i++){
-  const tx=255+Math.random()*870,ty=370+Math.random()*450;
-  if(!dogBlocked(tx,ty)&&Math.hypot(tx-g.x,ty-g.y)>70
-     &&dogs.every(o=>o===g||Math.hypot(o.tx-tx,o.ty-ty)>74)){ // จุดหมายห่างหมาตัวอื่น (ไม่ไปออที่เดียว)
+  const tx=g.zx0+Math.random()*(g.zx1-g.zx0),ty=g.zy0+Math.random()*(g.zy1-g.zy0); // เดินเฉพาะโซนของตัวเอง
+  if(!dogBlocked(tx,ty)&&Math.hypot(tx-g.x,ty-g.y)>28){
    const p=findPath(g.x,g.y,tx,ty);
    if(p){g.tx=tx;g.ty=ty;g.path=p;return;}}}
  g.tx=g.home[0];g.ty=g.home[1];g.path=[[g.home[0],g.home[1]]];}
