@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="th"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-store, max-age=0">
 <title>Trade Team AI — ออฟฟิศทีมเทรด</title>
 <style>
  :root{color-scheme:light;--cyan:#0e8f8a;--green:#1f9d57;--yellow:#b07d00;--pink:#c0356f;--red:#d62828;--brand:#1545d6;--txt:#1c2330;--dim:#6b7280;--line:#c9d4f0;--panel:rgba(255,255,255,.96)}
@@ -1017,7 +1018,7 @@ function openReport(){
   else body+=`<p style="font-size:13.5px">${p.replace(/\n/g,'<br>')}</p>`;}
  body+=`<div class="note">รายงานฉบับเต็มบันทึกอยู่ในโฟลเดอร์ reports/ · อัปเดตอัตโนมัติทุกรอบประชุม (8 รอบ/วันทำการ) · ข้อมูลประกอบการตัดสินใจ ไม่ใช่คำแนะนำการลงทุน</div>`;
  document.getElementById('modal').innerHTML=
-  `<div class="mh"><div class="ico">📋</div><div><h2>รายงานประชุมทีมเทรด</h2><p>ฉบับรอบวิเคราะห์ล่าสุด — คลิกจากโต๊ะประชุม</p></div><button class="x" onclick="closeModal()">✕</button></div><div class="mb">${body}</div>`;
+  `<div class="mh"><div class="ico">📋</div><div><h2>รายงานประชุมทีมเทรด</h2><p>📅 ${REPORT_AT}</p></div><button class="x" onclick="closeModal()">✕</button></div><div class="mb">${body}</div>`;
  document.getElementById('ov').style.display='flex';}
 function pick(e){const r=cv.getBoundingClientRect();
  const mx=((e.clientX-r.left)*devicePixelRatio-offX)/scale,my=((e.clientY-r.top)*devicePixelRatio-offY)/scale;
