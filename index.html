@@ -327,7 +327,7 @@ const PICKS_US=[
 function pickTable(rows,head){let h='<table><tr>'+head.map(x=>`<th>${x}</th>`).join('')+'</tr>';
  for(const r of rows)h+='<tr>'+r.map((c,i)=>`<td${i==0?' style="font-weight:600;white-space:nowrap"':''}>${c}</td>`).join('')+'</tr>';return h+'</table>';}
 /* ============ สมาชิกทีม + รายงาน ============ */
-const REPORT_AT='รอบ 10:45 8 มิถุนายน 2026 · ราคาอ้างอิง baseline ปิดศุกร์ 5 มิ.ย. (ยังไม่มี feed realtime)'; // ⏰ ป้ายเวลารายงาน — งานอัตโนมัติอัปเดตทุกรอบ
+let REPORT_AT='รอบ 10:45 8 มิถุนายน 2026 · ราคาอ้างอิง baseline ปิดศุกร์ 5 มิ.ย. (ยังไม่มี feed realtime)'; // ⏰ ป้ายเวลารายงาน — งานอัตโนมัติอัปเดตทุกรอบ
 const MEMBERS={
  gm:{name:'หัวหน้าทีมเทรด',emoji:'👔',col:'#1545d6',desk:'สรุปประชุมเช้า',html:`
   <div class="sec">VERDICT</div>
@@ -581,7 +581,7 @@ MEMBERS.picks.html=MEMBERS.picks.html
 function swTab(btn,id){document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
  for(const t of['tabSET','tabUS','tabDOWN','tabDIV'])document.getElementById(t).style.display=t===id?'':'none';}
 /* ============ ข้อมูลให้ AI ตอบคำถาม ============ */
-const REPORT=`รายงานทีมเทรด — เตรียมเปิดตลาดจันทร์ 8 มิ.ย. 2026 (ราคาปิดศุกร์ 5 มิ.ย. · US ปิดศุกร์ 5 มิ.ย. "วันชิปถล่มทั่วโลก")
+let REPORT=`รายงานทีมเทรด — เตรียมเปิดตลาดจันทร์ 8 มิ.ย. 2026 (ราคาปิดศุกร์ 5 มิ.ย. · US ปิดศุกร์ 5 มิ.ย. "วันชิปถล่มทั่วโลก")
 [ภาพใหญ่เปิดจันทร์] ศุกร์ 5 มิ.ย. ตลาดหุ้น US ร่วงหนักสุดตั้งแต่ ต.ค.: S&P 500 7,383.74 (−2.64%), Nasdaq 25,709.43 (−4.18% แย่สุดตั้งแต่ เม.ย. 2025), Dow 50,866.78 (−1.35%), VIX +40% — สาเหตุ: (1) Broadcom ให้ guidance ชิป AI Q3 ต่ำคาด → SOX −10% AMD −10.9% ($466) INTC −11.3% ($99.17) NVDA −5.9% ($205) MRVL −16% MU −13% AVGO −7% (2) จ้างงาน พ.ค. 172,000 ตำแหน่ง (คาด 85,000) → ยีลด์พุ่ง กลัวเฟดไม่ลดดอกเบี้ย · ทอง −3.1% $4,365 · Brent ~$97 | ⚠️ตลาดไทยปิดก่อน US ร่วง → จันทร์เสี่ยง gap down กลุ่มอิเล็กฯ (HANA/KCE/DELTA) โดนแรงขายต่อ ส่วนแบงก์-พลังงาน-defensive เป็นที่หลบภัย
 [พอร์ต Sirapob] มูลค่ารวม 342,266.47฿ (−750 จากรอบ 14:08 — HANA ร่วงแรง) กำไรสะสม +58,302 (+20.89%) | BANPU 2,000@5.96 ล่าสุด 5.65 (intraday efin, −0.88% วันนี้ ช่วงวัน 5.60–5.75, P/L −5.2% ใต้ทุน, ติด CA — Record Date วันนี้ 5 มิ.ย.) | KCE 600@32.89 ล่าสุด 37.50 (11:24 Google Finance, −3.85% วันนี้ ต่ำสุด 37.25 🔴เกาะ stop 37.50, P/L +14.0%) | KTB 600@32.55 ล่าสุด 35.50 (intraday efin, 0.00% ช่วงวัน 35.00–35.75, P/L +1,770฿ +9.1%, แข็งสุดในพอร์ต — บัวหลวงแนะซื้อวันนี้ 12:34) | HANA 600@28.00 ล่าสุด 35.25 (intraday efin หลังเที่ยง, 🔴−9.03% วันนี้! เปิด 38.50 เทลง low 34.50 วอลุ่ม 26.9 ล้านหุ้น — บัวหลวงลดเหลือ "ถือ" เป้า 42, P/L +4,350฿ +25.9% ลดจาก +30.4%, น้ำหนัก 6.2%) | SYNEX 1,200@9.27 ล่าสุด 9.30 (14:41 Google Finance, +0.54% ตัวเดียวที่เขียว, น้ำหนัก 3.3%, ธีม AI PC เป้าโบรก 12.50 — ระวังใกล้ low 52wk 8.90) | SPTX 20,000,000@0.01 ราคา 0.01 (ติด floor — ไม่มี bid, offer ค้าง 1.4 พันล้านหุ้น, CB/T1, น้ำหนัก 58.4%) | SPTX-W8 5,000,000@0.00 ราคา 0.01 (4 มิ.ย., +50,000฿, CB/T1, 14.6%) | เงินสด 4,856.47฿ (1.4%) | หุ้นปกติ 5 ตัว: +8,302 (+10.5%) | stop loss + alert ตั้งครบ (ราคา intraday ~11:24–14:41 น. delayed ~15 นาที)
 [ความเสี่ยง] 🔴 สูงมาก: SPTX+W8 รวม 76.5% ของพอร์ต (เกณฑ์กลุ่มเดียว ≤35%, ตัวเดียว ≤20%) ทั้งคู่ติด CB เสี่ยงพักเทรด/เพิกถอน มูลค่าอาจเป็นศูนย์ | เงินสด 1.3% ต่ำกว่าเกณฑ์ 10% | แผน: 1) ลด W8 ก่อน (กำไรลอยล้วน 50,000฿ ได้เงินสดทันที เสี่ยงหมดอายุเป็นศูนย์) 2) เข้าใจดีล BANPU 3) ตั้ง stop KCE 37.50 KTB 33.75 BANPU 5.50 4) เงินสด ≥10% 5) เปิดไม้ใหม่ไม่เกิน 10%/ไม้
@@ -700,6 +700,15 @@ function pushChat(){const cb=document.getElementById('chatBody');const [w,t]=CHA
  const d=document.createElement('div');d.className='m';d.innerHTML=`<div class="who">${w}</div><div class="tx">${t}</div>`;
  cb.prepend(d);while(cb.children.length>4)cb.lastChild.remove();}
 pushChat();pushChat();pushChat();setInterval(pushChat,5200);
+/* ── รายงานสด: ดึง report.json ทุกครั้งที่เปิดหน้า (ทีม push ไฟล์เล็กนี้ทุกรอบประชุม → เว็บอัปเดตรายงานเสมอ) ── */
+fetch('report.json?t='+Date.now()).then(r=>r.ok?r.json():Promise.reject()).then(d=>{
+ if(d&&d.report)REPORT=d.report;
+ if(d&&d.at){REPORT_AT=d.at;
+  const b=document.createElement('div');
+  b.style.cssText='position:fixed;left:50%;transform:translateX(-50%);top:84px;z-index:30;background:#1f9d57;color:#fff;font:600 11px Kanit,system-ui;padding:4px 12px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.2);transition:opacity 1s';
+  b.textContent='🟢 รายงานสดจากการประชุม: '+d.at;
+  document.body.appendChild(b);setTimeout(()=>{b.style.opacity='0';},8000);}
+}).catch(()=>{});
 /* ============ Toasts ============ */
 function toast(t,info){const d=document.createElement('div');d.className='toast'+(info?' info':'');d.innerHTML=t;document.getElementById('toasts').append(d);setTimeout(()=>d.remove(),9000);}
 setTimeout(()=>toast('⚠️ <b>ศุกร์ชิปถล่มทั่วโลก:</b> Nasdaq −4.2% (แย่สุดตั้งแต่ เม.ย.) — จันทร์ HANA/KCE เสี่ยงโดนขายต่อ'),1200);
