@@ -750,9 +750,7 @@ function ld(n){const im=new Image();im.onload=()=>{im.ok=true;};im.onerror=()=>{
 for(const r of ['gm','news','news2','tech','risk','port','strat','chart']){
  for(const d of ['east','north-east','north','north-west','south-east','south-west','south','west'])ld(`char_${r}_${d}`);
  for(const d of ['east','north','south','west'])for(let f=0;f<6;f++)ld(`walk_${r}_${d}_${f}`);}
-for(let n=1;n<=5;n++){
- for(const d of ['east','north-east','north','north-west','south-east','south-west','south','west'])ld(`dog${n}_${d}`);
- for(const d of ['east','north','south','west'])for(let f=0;f<6;f++)ld(`dogwalk${n}_${d}_${f}`);}
+/* (เอาน้องหมาออกหมดแล้ว — ไม่โหลดสไปรท์หมา) */
 for(const o of ['obj_desk','obj_ticker','obj_table','obj_plant','obj_rug','obj_siren','obj_coffee','obj_safe',
  'obj_desk2','obj_ticker2','obj_table2','obj_safe2','obj_coffee2','obj_display','obj_window','logo','wall_glass','wall_v','wall_h','wall_door','wall_corner'])ld(o);
 function img(n){const i=IMGS[n];return(i&&i.ok)?i:null;}
@@ -1001,8 +999,7 @@ function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const t=ts/1
   ...chars.map(c=>({z:c.y,f:()=>drawPixelChar(c,t)})),
   {z:700,f:()=>{drawObj(pickN('obj_table2','obj_table'),690,700,150,150);}}, // โต๊ะประชุมกลางห้องใหญ่
   ...DESKS.map(d=>({z:d.y+34,f:()=>drawDesk(d)})),
-  {z:-1,f:()=>{for(const g of dogs)updateDog(g,dt);}},   // อัปเดตน้องหมาทั้ง 5 ตัวก่อนวาด
-  ...dogs.map(g=>({z:g.y,f:()=>drawDog(g,t)})),          // 🐶 น้องหมา 5 ตัว (เรียงความลึกตามตัว)
+  /* (เอาน้องหมาออกหมดแล้ว) */
  ];
  ENTS.sort((a,b)=>a.z-b.z).forEach(e=>e.f());
  cx.restore();
