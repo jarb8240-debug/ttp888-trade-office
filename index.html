@@ -92,7 +92,7 @@
  <div class="r"><span>หุ้นปกติ (5 ตัว รวม SYNEX)</span><b class="up">+8,302 (+10.5%)</b></div>
  <div class="r"><span>จับตาจันทร์</span><b class="down">กลุ่มอิเล็กฯ (HANA/KCE) เสี่ยงโดนขายต่อจากชิป US</b></div>
  <div class="r"><span>เงินสด</span><b class="down">฿4,856 (1.4%)</b></div>
- <div class="r"><span>ราคา ณ</span><b>ปิดศุกร์ 5 มิ.ย. 2026 (เช็กราคาจริงตอนเปิดจันทร์)</b></div>
+ <div class="r"><span>ราคา ณ</span><b>เช็กรอบ 10:45 จันทร์ 8 มิ.ย. · ไม่มี feed realtime → คงราคา baseline ปิดศุกร์ 5 มิ.ย.</b></div>
 </div></div>
 
 <div class="hud" id="kpi"><h3>📊 ตลาดสด · เรียลไทม์</h3><div class="b">
@@ -111,7 +111,7 @@
   <div class="row"><span>Nasdaq (ศุกร์)</span><b class="down">25,709 ▼4.18%</b></div>
  </div>
  <div id="kpiAnaly" style="border-top:1px solid #edf0f6;margin-top:6px;padding-top:5px">
-  <div style="font-size:10px;color:#6b7280">ปิดศุกร์ <span id="kpiTime">5 มิ.ย. 2026</span> · เตรียมเปิดจันทร์ 8 มิ.ย.</div>
+  <div style="font-size:10px;color:#6b7280">ปิดศุกร์ <span id="kpiTime">5 มิ.ย. 2026</span> · เช็กรอบ 10:45 จันทร์ 8 มิ.ย. (ยังไม่มีราคา intraday ยืนยัน)</div>
   <div class="row"><span>SET ปิดศุกร์</span><b class="down">1,582.60 ▼ หลุด 1,600</b></div>
   <div class="row"><span>⚠️ ชิป US ศุกร์</span><b class="down">AMD ▼11% NVDA ▼6% MRVL ▼16%</b></div>
   <div class="row"><span>จันทร์เสี่ยง</span><b class="down">SET gap down · อิเล็กฯ โดนต่อ</b></div>
@@ -150,7 +150,7 @@
  <div class="tr" onclick="window.open('https://www.tradingview.com/symbols/SET-SYNEX/','_blank')"><span class="sym">SYNEX</span><span class="inf">9.30 <b class="up">+0.3%</b></span></div>
  <div class="tr" onclick="window.open('https://www.tradingview.com/symbols/SET-SPTX/','_blank')"><span class="sym">SPTX ⚠️</span><span class="inf">0.01 <b>0%</b></span></div>
  <div class="tr" onclick="window.open('https://www.tradingview.com/symbols/SET-SPTX.W8/','_blank')"><span class="sym">SPTX-W8 ⚠️</span><span class="inf">0.01 <b class="up">+50,000฿</b></span></div>
- <div style="font-size:9.5px;color:#6b7280;margin-top:5px">ราคา/P-L = ปิดศุกร์ 5 มิ.ย. 2026 (W8 ราคา 4 มิ.ย.) · ⚠️ จันทร์เปิดอาจ gap จากข่าวชิป US — แตะชื่อหุ้นดูราคาสดก่อนเทรด</div>
+ <div style="font-size:9.5px;color:#6b7280;margin-top:5px">ราคา/P-L = baseline ปิดศุกร์ 5 มิ.ย. 2026 (W8 ราคา 4 มิ.ย.) · เช็กรอบ 10:45 จันทร์ 8 มิ.ย. ยังไม่มี feed realtime ยืนยัน ⚠️ แตะชื่อหุ้นดูราคาสดก่อนเทรด</div>
 </div></div>
 <div class="hud" id="chat"><h3>💬 ความเคลื่อนไหวทีม <span class="dot"></span></h3><div class="b" id="chatBody"></div></div>
 
@@ -327,7 +327,7 @@ const PICKS_US=[
 function pickTable(rows,head){let h='<table><tr>'+head.map(x=>`<th>${x}</th>`).join('')+'</tr>';
  for(const r of rows)h+='<tr>'+r.map((c,i)=>`<td${i==0?' style="font-weight:600;white-space:nowrap"':''}>${c}</td>`).join('')+'</tr>';return h+'</table>';}
 /* ============ สมาชิกทีม + รายงาน ============ */
-const REPORT_AT='เตรียมเปิดจันทร์ 8 มิ.ย. · ปิดศุกร์ 5 มิ.ย. 2026'; // ⏰ ป้ายเวลารายงาน — งานอัตโนมัติอัปเดตทุกรอบ
+const REPORT_AT='รอบ 10:45 8 มิถุนายน 2026 · ราคาอ้างอิง baseline ปิดศุกร์ 5 มิ.ย. (ยังไม่มี feed realtime)'; // ⏰ ป้ายเวลารายงาน — งานอัตโนมัติอัปเดตทุกรอบ
 const MEMBERS={
  gm:{name:'หัวหน้าทีมเทรด',emoji:'👔',col:'#1545d6',desk:'สรุปประชุมเช้า',html:`
   <div class="sec">VERDICT</div>
@@ -659,6 +659,7 @@ async function sendAsk(){const inp=document.getElementById('askTxt');const q=inp
  const b=document.getElementById('askBody');b.scrollTop=b.scrollHeight;}
 /* ============ Chat feed ============ */
 const CHAT=[
+ ['👔หัวหน้า','⏱️ รอบ 10:45 จันทร์ 8 มิ.ย. — ทีมเทคนิคยังดึงราคา realtime SET ที่เชื่อถือได้ไม่ได้ (ผลค้น cache ขัดกันเอง) จึงคงตัวเลขเป็น baseline ปิดศุกร์ ไม่แต่งราคา · จุดเฝ้าสุด: KCE เกาะ stop/ไฮเดิม 37.50 พอดี — แตะดูราคาสดก่อนตัดสินใจ'],
  ['🐂ข่าวบวก','HANA โดน −9% ไปแล้ว ผมว่า priced-in เยอะ ถ้าชิป US เด้งคืนนี้ มันรีบาวด์เร็วกว่าเพื่อนแน่ — ทุกย่อคือโอกาส'],
  ['🐻ข่าวระวัง','อย่ารีบช้อน! วอลุ่ม −9% คือแจกของ ตลาดขาลงของถูกถูกลงได้อีก รอยืนเหนือ 36 ก่อนค่อยคุยเรื่องเด้ง'],
  ['🐂ข่าวบวก','BANPU ดีล NewCo คือ re-rating ระยะยาว พลังงานขาขึ้นหนุน — มองข้ามสภาพคล่องหายช่วงสั้นได้'],
